@@ -1,0 +1,357 @@
+Stack
+	Next
+	tRPC
+	Tailwind
+	Supabase (DB, Auth, Images)
+	Stripe
+	Zustand
+	Sentry
+	Simple
+
+____________________________________________________________________
+
+
+Template 
+	✔ T3 App with 
+	✔ Supabase
+	Authentication
+	Auth UI
+	Zustand
+	Stripe
+	Simple
+	Sentry
+	Cookies
+	Privacy Policies/TOS
+	Form Input
+	Sitemap
+	Emailing Service
+	Address Search?
+
+____________________________________________________________________
+
+Docs
+	Next
+	TRPC
+	Supabase
+
+____________________________________________________________________
+
+
+- npm create t3-app@latest
+
+- Make Supabase project
+
+- npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs
+- add env variables
+SUPABASE_SERVICE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WH_SECRET=
+WEBHOOK_SECRET=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_STRIPE_KEY=
+NEXT_PUBLIC_SITE_URL=
+
+Types:
+- npm i supabase@">=1.8.1" --save-dev
+- set "sb": "npx supabase gen types typescript --project-id ... --schema public > ./src/schema.ts"
+
+Authentication:
+- set auth providers at app.supabase.com/project/.../auth/providers
+- make the app on the provider platform
+	- https://console.cloud.google.com/home/dashboard
+	- https://developer.twitter.com/en/portal/projects/1515098723440803842/apps
+	- https://github.com/settings/applications/new
+	- create oAuth client ID https://console.cloud.google.com/apis/credentials?project=
+	- set authorised and redirect urls on client
+	- publish app OAuthConsent screen
+- set supabase client id and secret
+- set authorised url to localhost on supabase auth url config: app.supabase.com/project/srvugcsqhomwbephgagd/auth/url-configuration
+
+- merge /Template files
+- npm i --save-dev stripe-event-types
+- npm i micro stripe next-sitemap react-tailwindcss-select @heroicons/react @headlessui/react clsx
+- barrel export all routers (right click folder)
+- npx supabase login
+- n sb
+- (re adjust ./routers import in root.ts)
+
+- edit next-sitemap.config.js, server-sitemap.xml/index.ts to appropriate routes
+- set reactStrictMode in next.config.js to false
+- replace favicon, logo in public
+
+- Add tailwind template
+
+You're all done!
+
+Deploy Time Config
+1. Google/OAuth provider origin url/redirect url/logo/verification
+2. Stripe webhook urls
+3. Supabase webhook urls
+4. Supabase auth redirect urls
+
+5. Netlify
+6. Cloudflare
+
+____________________________________________________________________
+
+
+Now its time to set up API routes (TRPC routers)
+- Write all required routers
+- Write requirement outline, inputs, calls, output for each router
+- Use TRPC middleware
+
+- Make Supabase RLS policies
+- Add access functionality to API
+
+____________________________________________________________________
+
+
+Time Suckers
+- Server side authentication with helpers and context injection
+- Authentication error (strictMode)
+- TRPC backend router layout
+- TRPC middleware vs context injection (for user extraction)
+- Request throttling (with context)
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[TRPC]
+# Where is TRPC object created?			s/trpc.ts
+# What is TRPC object added to?
+	it is not directly added
+	it has a create router fn and procedure
+	create router is used to create parent router, which is added to NextApiHandler
+	procedure is used to create routers
+# What inputs does NextApiHandler take?		parent router, context creation fn
+# Where is context creation function written?	s/trpc.ts
+# Where is context creation function added?	to NextApiHandler
+# Where is NextApiHandler created		p/trpc/[trpc].ts
+# Where is parent router created?		s/root.ts
+# Where to write new routers? 			s/routers/<name>.ts
+# Where to add new routers? 			to parent router
+# Where to write new middleware?		s/trpc.ts
+# Where to connect middleware to procedure?	s/trpc.ts
+# Where to write new procedures?		s/trpc.ts
+# Where to add new procedures?			already added to TRPC object
+# What is the use of procedures?		router creation
+
+1 context → 1 parent router → 'x' routers
+1 router → 'y' procedures
+1 procedure → 'z' middlewares
+Only 1 context for every router, but any number of middlewares
+
+> context: attaching objects
+> middleware: filtering requests (based on attached or fetched info)
+> procedures: performing operations
+
+Middleware building flow
+- Make a middleware
+- Add it to public procedure to create a new (restricted) procedure
+- Use (restricted) procedure to create new (restricted) routers
+
+What TRPC gives
+- Server side routing
+- Server side middleware
+- Autocomplete
+- Easy fetch calls
+
+What to use it for
+- Complex db operations, which require lots of validation ops
+- Platform wide operations (e.g. get all products for homepage)
+- Forced limited operations (throttling, max fetch count etc)
+
+# Should I use client side library?
+# Should I make independent api route for cookie setting?
+# What should I change the inner context input type to?
+# What server ops should I handle outside of trpc?
+   - Authentication
+   - Cookie setting
+   - Next middleware, serversideprops & staticprops
+   - Simple client-db calls (access based match/filter CRUD - use with ZOD)
+
+Method 1: Minimal TRPC
+> The best way to use TRPC is to try as much as possible to not use it
+> Because force fitting everything into TRPC becomes a huge burden
+> Just replace fetch calls with TRPC, for everything else, useQuery
+
+Method 2: Maximal TRPC
+> Perform all server operations through TRPC
+> Only don't use TRPC where you can't access it (e.g. serversideprops)
+> Use it for boundary operations like auth, cookie setting, db calls
+
+
+		Pro			Con
+Method 1	Fast dev		Messy /lib
+Method 2	Uniform DX		++latency, ++serverless cost, fighting client libraries
+
+> Zod is more important to master than TRPC, because it integrates into your work, not vice versa
+> Combination of these 4 libraries in right proportions => a great product in the least time
+
+┌──────────────────────────────────────────────┐
+│  Zod -> Supabase Client -> useQuery -> TRPC  │
+└──────────────────────────────────────────────┘
+Zod: Pin
+SB Client: Pocket Knife
+useQuery: Dagger
+TRPC: Sword
+
+
+[Auth]
+Integration flow
+- Add global zus auth-state
+- Add set cookie API route
+- Add auth button and logic
+- useEffect, []
+   - Add user checker function
+	- Set auth-state
+   - Add supabase auth listener
+	- auth-state set
+   	- Cookie set
+   	- Router push
+   - Cleanup unsub
+- Add auth-state based UI
+- Add auth guard middleware
+
+Auth setting in 4 places
+✖ initial DB call
+✔ user action
+✔ listener
+✖ effect
+Use zus to store info(update with listener), don't rely on supabase client
+
+
+[Templating]
+Things you make
+- hooks (will contain store, external calls, initialiser)
+- lib
+- middlewares
+- routers
+- context
+
+Pattern
+- Every entity (not action) in app (e.g. User, Cart) has a custom hook
+- The hook can have a store, internal logic, or external API calls
+- Every hook has an init function, which manages LS call, initial DB call, listener attachment
+- Init functions are called by useInit hook only, not the hook itself
+- If init functions are interdependent (e.g. user→cart), then waterfall init return values
+- All init functions are async
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Stripe Connect Management with Usage Based Billing and Custom Payouts
+
+✔ Customer
+	- Make a customer and store cus_id on sign up
+	  > https://stripe.com/docs/api/customers/create
+- Subscription
+	- Make checkout session and store sub_item_id when cus_id sets up payment
+	  > https://stripe.com/docs/api/checkout/sessions/create
+	✖ Make+store sub_item_id when cus_id sets up payment
+	  > https://stripe.com/docs/api/subscriptions/create
+- Management
+	- Manage with Billing Portal (update payment method, cancel sub)
+	  > https://stripe.com/docs/api/customer_portal/sessions/create
+	✖ Manage cancellation (and remove sub_id)
+	  > https://stripe.com/docs/api/subscriptions/cancel
+- Connect
+	- Make+store connected_act_id when engg onboards
+	  > https://stripe.com/docs/connect/express-accounts
+	  > https://stripe.com/docs/api/accounts/create
+	  > https://stripe.com/docs/api/account_links/create
+- Usage
+	- Update record on every API call (in CF KV)
+	  > https://stripe.com/docs/billing/subscriptions/usage-based#report
+- Payout
+	- Payout on manual action by engg if amt > $10
+	  > https://stripe.com/docs/api/payouts/create
+
+____________________________________________________________________
+
+
+Code Execution Strategies
+- Server Calls (from front end)
+- Webhook Calls
+   - Stripe
+   - Supabase table CRUD
+- Supabase Function Triggers (within DB)
+
+DB ↔ Server ↔ External (Stripe etc)
+	|
+     Client
+
+____________________________________________________________________
+
+
+Pages to Code
+- Front end
+- API Routers
+- Webhooks
+- Misc(pp, top, success)
+- Middlewares
+
+____________________________________________________________________
+
+
+Marketing Strategies
+- Post a LinkedIn job for prompt engineers to drive traffic
+- Make a building an AI startup vlog/blog
+- Reach out to PEs on LinkedIn/Promptbase
+- HN/IH/PH/Reddit
+- Rebuild cutting edge tools in Promptify and make videos
+- Make best AI tools and resources compilation newsletters
+- Make community/jobs websites.
+
+_____________________________________________________________________
+
+Supabase Function Hooks
+
+URL
+/api/webhooks/supabase/create-stripe-customer
+
+WEBHOOK_SECRET
+8329614fcd6d63e88df1cbc3a81c22ccc30a7caf1eb42a82d75b6a393cf7c846
+
+____________________________________________________________________
+
+
+Pre Launch Settings Checklist
+□ Supabase auth url
+□ Provider auth urls
+□ Supabase webhooks urls
+□ Stripe webhooks urls
+□ env variables 
+
+
+____________________________________________________________________
+
+
+Form Logic Variants
+> Checked
+   - on submit		(errors by zod path)
+   - dynamically	(errors in custom vars)
+   - server side	(errors via alerts)
+> Values Recording
+   - in form		(form data via prop 'name')
+   - in form customised (nested on sub)
+   - custom vars 	(appended to form on sub)
+> Error Reporting
+   - zod field name
+   - obj property name	(arrays)
+
+• Arrays matched by property name, no need for dynamic zod names
+Element names → data → validated against Schema → Error object paths acc to schema → Error paths converted to flat Map of errors → Elements have errors matching the name structure by convention
+
+
+
+
+
+
+
+
+
+
+
