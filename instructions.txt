@@ -41,7 +41,7 @@ ____________________________________________________________________
 
 - Make Supabase project
 
-- npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs
+- npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs @supabase/auth-ui-react @supabase/auth-ui-shared
 - add env variables
 SUPABASE_SERVICE_KEY=
 STRIPE_SECRET_KEY=
@@ -54,7 +54,7 @@ NEXT_PUBLIC_SITE_URL=
 
 Types:
 - npm i supabase@">=1.8.1" --save-dev
-- set "sb": "npx supabase gen types typescript --project-id ... --schema public > ./src/schema.ts"
+// - set "sb": "npx supabase gen types typescript --project-id ... --schema public > ./src/schema.ts"
 
 Authentication:
 - set auth providers at app.supabase.com/project/.../auth/providers
@@ -74,11 +74,11 @@ Authentication:
 - barrel export all routers (right click folder)
 - npx supabase login
 - n sb
-- (re adjust ./routers import in root.ts)
 
 - edit next-sitemap.config.js, server-sitemap.xml/index.ts to appropriate routes
-- set reactStrictMode in next.config.js to false
+// - set reactStrictMode in next.config.js to false, ignorePatterns in eslint config to ["*"]
 - replace favicon, logo in public
+
 
 - Add tailwind template
 
