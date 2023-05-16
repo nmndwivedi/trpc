@@ -3,8 +3,8 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { buffer } from "micro";
-import { STRIPE_SECRET_KEY, STRIPE_WH_SECRET } from "../../../lib/env";
-import { supamaster } from "../../../lib/supabase";
+import { STRIPE_SECRET_KEY, STRIPE_WH_SECRET } from "~/lib/env";
+import { supamaster } from "~/lib/supabase";
 import Stripe from "stripe";
 
 export const config = { api: { bodyParser: false } };

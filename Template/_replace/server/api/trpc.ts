@@ -17,7 +17,7 @@
  *
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { supamaster } from "../../lib/supabase";
+import { supamaster } from "~/lib/supabase";
 
 /**
  * Replace this with an object if you want to pass things to createContextInner
@@ -80,10 +80,10 @@ import {
   SupabaseClient,
   User,
 } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../../schema";
+import { Database } from "~/schema";
 
 import Stripe from "stripe";
-import { STRIPE_SECRET_KEY } from "../../lib/env";
+import { STRIPE_SECRET_KEY } from "~/lib/env";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -123,7 +123,7 @@ export const isAuthenticated = t.middleware(async ({ ctx, next }) => {
 
   return next({ ctx: { ...ctx, user: ctx.user } });
 });
-    
+
 export const attachStripe = t.middleware(async ({ ctx, next }) => {
   const stripe = new Stripe(STRIPE_SECRET_KEY, {
     apiVersion: "2022-11-15",
