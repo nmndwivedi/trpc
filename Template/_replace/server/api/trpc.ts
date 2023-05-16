@@ -16,7 +16,7 @@
  * processing a request
  *
  */
-import { supamaster } from "../../lib/supabase";
+import { supamaster } from "~/lib/supabase";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 
 import { initTRPC, TRPCError } from "@trpc/server";
@@ -24,7 +24,7 @@ import superjson from "superjson";
 import type { User } from "@supabase/auth-helpers-nextjs";
 
 import Stripe from "stripe";
-import { STRIPE_SECRET_KEY } from "../../lib/env";
+import { STRIPE_SECRET_KEY } from "~/lib/env";
 
 /**
  * Replace this with an object if you want to pass things to createContextInner

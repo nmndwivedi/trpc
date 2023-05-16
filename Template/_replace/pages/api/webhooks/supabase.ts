@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { STRIPE_SECRET_KEY, WEBHOOK_SECRET } from "../../../lib/env";
-import { supamaster } from "../../../lib/supabase";
+import { STRIPE_SECRET_KEY, WEBHOOK_SECRET } from "~/lib/env";
+import { supamaster } from "~/lib/supabase";
 
 export default async function handler(
   req: NextApiRequest,

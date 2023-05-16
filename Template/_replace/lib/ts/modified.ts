@@ -5,7 +5,7 @@
   3. Manually assigning types to jsonb objects in postgres with quicktype
 */
 
-import { Database } from "../../schema";
+import { Database } from "~/schema";
 import { PartialBy } from "./utility";
 
 // export type RawPrompt = PartialBy<
