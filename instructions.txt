@@ -11,8 +11,8 @@ Stack
 ____________________________________________________________________
 
 
-Template 
-	✔ T3 App with 
+Template
+	✔ T3 App with
 	✔ Supabase
 	Authentication
 	Auth UI
@@ -69,7 +69,7 @@ Authentication:
 - set authorised url to localhost on supabase auth url config: app.supabase.com/project/srvugcsqhomwbephgagd/auth/url-configuration
 
 - merge /Template files
-- npm i --save-dev stripe-event-types
+- npm i --save-dev stripe-event-types ts-toolbelt @total-typescript/ts-reset
 - npm i micro stripe next-sitemap react-tailwindcss-select @heroicons/react @headlessui/react clsx
 - barrel export all routers (right click folder)
 - npx supabase login
@@ -323,7 +323,7 @@ Pre Launch Settings Checklist
 □ Provider auth urls
 □ Supabase webhooks urls
 □ Stripe webhooks urls
-□ env variables 
+□ env variables
 
 
 ____________________________________________________________________
