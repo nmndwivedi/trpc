@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 
-const siteUrl = "https://promptify.ai"
+const siteUrl = "https://mywebsite.ai"
 
 module.exports = {
   siteUrl,
