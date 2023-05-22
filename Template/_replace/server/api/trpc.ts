@@ -17,7 +17,7 @@
  *
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { supamaster } from "~/lib/supabase";
+import { supamaster } from "@/lib/supabase";
 
 /**
  * Replace this with an object if you want to pass things to createContextInner
@@ -80,10 +80,10 @@ import {
   SupabaseClient,
   User,
 } from "@supabase/auth-helpers-nextjs";
-import { Database } from "~/schema";
+import { Database } from "@/schema";
 
 import Stripe from "stripe";
-import { STRIPE_SECRET_KEY } from "~/lib/env";
+import { STRIPE_SECRET_KEY } from "@/lib/env";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

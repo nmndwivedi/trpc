@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { useAuth } from '~/hooks/auth'
+import { useAuth } from '@/hooks/auth'
 import Link from 'next/link'
-import { classNames } from '~/lib/common'
+import { classNames } from '@/lib/common'
 
 export function NavbarDropdown() {
     const { user, signOut } = useAuth()

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Switch } from "@headlessui/react";
-import { classNames } from "~/lib/common";
+import { classNames } from "@/lib/common";
 
 export default function Toggle({
   enabled,

@@ -1,8 +1,8 @@
 import { Provider } from "@supabase/supabase-js";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
-import { NEXT_PUBLIC_SITE_URL } from "~/lib/env";
+import { api } from "@/utils/api";
+import { NEXT_PUBLIC_SITE_URL } from "@/lib/env";
 
 export const useAuth = () => {
   const supabase = useSupabaseClient();

@@ -6,7 +6,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useAuth } from "~/hooks/auth";
+import { useAuth } from "@/hooks/auth";
 
 const navigation = [
   { name: "Product", href: "#" },

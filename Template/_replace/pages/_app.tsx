@@ -1,9 +1,9 @@
 import { AppProps, type AppType } from "next/app";
 
-import { api } from "~/utils/api";
+import { api } from "@/utils/api";
 
-import "~/styles/globals.css";
-import { useInit } from "~/hooks/init";
+import "@/styles/globals.css";
+import { useInit } from "@/hooks/init";
 import { Session } from "@supabase/supabase-js";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";

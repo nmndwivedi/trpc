@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import Toggle from "~/components/sub/Toggle";
+import Toggle from "@/components/sub/Toggle";
 
 export default function LabelToggle({
   enabled,

@@ -9,8 +9,8 @@ import {
   NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_SUPABASE_URL,
   SUPABASE_SERVICE_KEY,
-} from "~/lib/env";
-import { Database } from "~/schema";
+} from "@/lib/env";
+import { Database } from "@/schema";
 
 export const supamaster = createClient<Database>(
   NEXT_PUBLIC_SUPABASE_URL,

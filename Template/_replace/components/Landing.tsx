@@ -5,7 +5,7 @@ import {
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { classNames } from "~/lib/common";
+import { classNames } from "@/lib/common";
 import Navbar from "./Navbar";
 
 const features = [
