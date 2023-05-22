@@ -16,7 +16,7 @@
  * processing a request
  *
  */
-import { supamaster } from "~/lib/supabase";
+import { getUserFromToken, supamaster } from "~/lib/supabase";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 
 import { initTRPC, TRPCError } from "@trpc/server";
@@ -63,12 +63,8 @@ export const createTRPCContext = async ({
 
   if (cookie) {
     cookie = decodeURIComponent(cookie);
-    cookie = cookie.split("supabase-auth-token=")[1];
-    if (cookie) cookie = JSON.parse(cookie);
-    cookie = cookie?.[0];
-
-    const { data } = await supamaster.auth.getUser(cookie);
-    user = data.user;
+    let token = cookie.split("supabase-auth-token=")[1];
+    if (token) user = await getUserFromToken(token);
   }
 
   return createInnerTRPCContext({

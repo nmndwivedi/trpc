@@ -11,8 +11,8 @@ Stack
 ____________________________________________________________________
 
 
-Template 
-	✔ T3 App with 
+Template
+	✔ T3 App with
 	✔ Supabase
 	Authentication
 	Auth UI
@@ -41,9 +41,10 @@ ____________________________________________________________________
 
 - Make Supabase project
 
-- npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs @supabase/auth-ui-react @supabase/auth-ui-shared
+- npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs @supabase/auth-ui-react @supabase/auth-ui-shared jose
 - add env variables
 SUPABASE_SERVICE_KEY=
+JWT_SECRET=
 STRIPE_SECRET_KEY=
 STRIPE_WH_SECRET=
 WEBHOOK_SECRET=
@@ -323,7 +324,7 @@ Pre Launch Settings Checklist
 □ Provider auth urls
 □ Supabase webhooks urls
 □ Stripe webhooks urls
-□ env variables 
+□ env variables
 
 
 ____________________________________________________________________
