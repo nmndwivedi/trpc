@@ -1,60 +1,53 @@
-Stack
-	Next
-	tRPC
-	Tailwind
-	Supabase (DB, Auth, Images)
-	Stripe
-	Zustand
-	Sentry
-	Simple
 
-____________________________________________________________________
+┌───────────────────────┐
+     T3 Template 🚀🎸   
+└───────────────────────┘
 
+Elements
 
-Template
-	✔ T3 App with
+	✔ T3 App
 	✔ Supabase
-	Authentication
-	Auth UI
-	Zustand
-	Stripe
-	Simple
-	Sentry
-	Cookies
-	Privacy Policies/TOS
-	Form Input
-	Sitemap
-	Emailing Service
-	Address Search?
+	✔ Authentication
+	✔ Auth UI
+	✔ Dark Mode
+	✔ Color Theme
+	✔ Custom Font
+	✔ Sitemap
+	✔ Stripe
+	✖ Form Input
+	✖ Tinybird
+	✖ Sentry
+	✖ MJML Mail Service
+	✖ Zustand
 
 ____________________________________________________________________
 
-Docs
-	Next
-	TRPC
-	Supabase
 
-____________________________________________________________________
+Method
 
+- make new supabase project
 
 - npm create t3-app@latest
 
-- Make Supabase project
+Merge Template:
+- merge /Template files
+- set env variables
 
+Dependencies:
 - npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs @supabase/auth-ui-react @supabase/auth-ui-shared
-- add env variables
-SUPABASE_SERVICE_KEY=
-STRIPE_SECRET_KEY=
-STRIPE_WH_SECRET=
-WEBHOOK_SECRET=
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_STRIPE_KEY=
-NEXT_PUBLIC_SITE_URL=
+- npm i micro stripe next-themes next-sitemap react-tailwindcss-select @heroicons/react @headlessui/react clsx
+- npm i stripe @stripe/stripe-js
 
 Types:
 - npm i supabase@">=1.8.1" --save-dev
-// - set "sb": "npx supabase gen types typescript --project-id ... --schema public > ./src/schema.ts"
+- npm i --save-dev stripe-event-types ts-toolbelt @total-typescript/ts-reset
+
+- barrel export all routers (right click folder)
+- npx supabase login
+- n sb
+
+- replace favicon, logo in public
+- adjust tailwind theme in config file
 
 Authentication:
 - set auth providers at app.supabase.com/project/.../auth/providers
@@ -68,32 +61,35 @@ Authentication:
 - set supabase client id and secret
 - set authorised url to localhost on supabase auth url config: app.supabase.com/project/srvugcsqhomwbephgagd/auth/url-configuration
 
-- merge /Template files
-- npm i --save-dev stripe-event-types ts-toolbelt @total-typescript/ts-reset
-- npm i micro stripe next-sitemap react-tailwindcss-select @heroicons/react @headlessui/react clsx
-- barrel export all routers (right click folder)
-- npx supabase login
-- n sb
 
-- edit next-sitemap.config.js, server-sitemap.xml/index.ts to appropriate routes
-// - set reactStrictMode in next.config.js to false, ignorePatterns in eslint config to ["*"]
-- replace favicon, logo in public
+- Make Supabase tables, functions, triggers, webhooks
+	tables: billing
+	functions (table/server->plpgsql): make billing profile, topup balance,
+	webhooks (table->api): add stripe customer
+- Make Stripe products, webhooks, add Env vars with price ID
 
-
-- Add tailwind template
+- Add a tailwind template
 
 You're all done!
 
+---
+
 Deploy Time Config
-1. Google/OAuth provider origin url/redirect url/logo/verification
-2. Stripe webhook urls
-3. Supabase webhook urls
-4. Supabase auth redirect urls
+1. edit next-sitemap.config.js, server-sitemap.xml/index.ts to appropriate routes
+2. Google/OAuth provider origin url/redirect url/logo/verification
+3. Stripe webhook urls
+4. Supabase webhook urls
+5. Supabase auth redirect urls
 
-5. Netlify
-6. Cloudflare
+____________________________________________________________________
 
+↓ TRIGGER		table   	plpgsql   	api		<- GETS TRIGGERED
+table			    x		trigger  	http-webhook
+plpgsql			function	      x	          x
+server			    v		 rpc		  x
+____________________________________________________________________
 
+Generate 32 byte secret: require('crypto').randomBytes(32).toString('base64').slice(0, 32)
 ____________________________________________________________________
 
 Inferred GetServerSideProps
@@ -150,7 +146,6 @@ export const getServerSideProps = (async (context) => {
 }) satisfies GetServerSideProps;
 
 ____________________________________________________________________
-
 
 Now its time to set up API routes (TRPC routers)
 - Write all required routers
@@ -342,16 +337,6 @@ DB ↔ Server ↔ External (Stripe etc)
 ____________________________________________________________________
 
 
-Pages to Code
-- Front end
-- API Routers
-- Webhooks
-- Misc(pp, top, success)
-- Middlewares
-
-____________________________________________________________________
-
-
 Marketing Strategies
 - Post a LinkedIn job for prompt engineers to drive traffic
 - Make a building an AI startup vlog/blog
@@ -360,16 +345,6 @@ Marketing Strategies
 - Rebuild cutting edge tools in Promptify and make videos
 - Make best AI tools and resources compilation newsletters
 - Make community/jobs websites.
-
-_____________________________________________________________________
-
-Supabase Function Hooks
-
-URL
-/api/webhooks/supabase/create-stripe-customer
-
-WEBHOOK_SECRET
-8329614fcd6d63e88df1cbc3a81c22ccc30a7caf1eb42a82d75b6a393cf7c846
 
 ____________________________________________________________________
 
@@ -402,12 +377,7 @@ Form Logic Variants
 Element names → data → validated against Schema → Error object paths acc to schema → Error paths converted to flat Map of errors → Elements have errors matching the name structure by convention
 
 
-
-
-
-
-
-
+____________________________________________________________________
 
 
 

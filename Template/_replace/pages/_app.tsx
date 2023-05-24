@@ -9,6 +9,9 @@ import { useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 
+import { ThemeProvider } from "next-themes";
+import { satoshi, inter } from "@/styles/fonts";
+
 const MyApp = ({
   Component,
   pageProps,
@@ -20,12 +23,16 @@ const MyApp = ({
   useInit();
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={pageProps.initialSession}
-    >
-      <Component {...pageProps} />
-    </SessionContextProvider>
+    <ThemeProvider attribute="class">
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={pageProps.initialSession}
+      >
+        <main className={clsx(satoshi.variable, inter.variable)}>
+          <Component {...pageProps} />
+        </main>
+      </SessionContextProvider>
+    </ThemeProvider>
   );
 };
 
