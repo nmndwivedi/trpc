@@ -1,9 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-  .btn-primary {
-    @apply text-textcolor dark:text-textcolor-dark bg-bgcolor dark:bg-bgcolor-dark px-4 py-2 rounded-md hover:-translate-y-1 transition-all shadow-sm hover:shadow-lg shadow-primarycolor/30 dark:shadow-primarycolor-dark/30 hover:shadow-primarycolor/30 dark:hover:shadow-primarycolor-dark/30 active:scale-90 active:shadow-md;
-  }
-}

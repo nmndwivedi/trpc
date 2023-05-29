@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .pbtn {
+    @apply rounded-md bg-primarycolor px-4 py-2 text-primarycontrastcolor shadow-sm shadow-primarycolor/60 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primarycolor/60 active:scale-90 active:shadow-sm dark:bg-primarycolor-dark dark:text-primarycontrastcolor-dark dark:shadow-primarycolor-dark/60 dark:hover:shadow-primarycolor-dark/60;
+  }
+
+  .sbtn {
+    @apply rounded-md px-4 py-2 text-textcolor transition-all hover:-translate-y-1 active:scale-90 dark:text-textcolor-dark;
+  }
+
+  .txt {
+    @apply text-textcolor dark:text-textcolor-dark;
+  }
+
+  .bg {
+    @apply bg-bgcolor dark:bg-bgcolor-dark;
+  }
+}

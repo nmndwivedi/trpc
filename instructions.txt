@@ -14,7 +14,7 @@ Elements
 	✔ Custom Font
 	✔ Sitemap
 	✔ Stripe
-	✖ Form Input
+	✔ Form Input
 	✖ Tinybird
 	✖ Sentry
 	✖ MJML Mail Service
@@ -22,21 +22,20 @@ Elements
 
 ____________________________________________________________________
 
-
 Method
-
-- make new supabase project
 
 - npm create t3-app@latest
 
 Merge Template:
 - merge /Template files
-- set env variables
 
 Dependencies:
 - npm i @supabase/supabase-js @supabase/auth-helpers-react @supabase/auth-helpers-nextjs @supabase/auth-ui-react @supabase/auth-ui-shared
 - npm i micro stripe next-themes next-sitemap react-tailwindcss-select @heroicons/react @headlessui/react clsx
 - npm i stripe @stripe/stripe-js
+
+Forms: 
+- npm install react-hook-form zod @hookform/resolvers @radix-ui/react-slot @radix-ui/react-label @radix-ui/react-select @radix-ui/react-popover @radix-ui/react-dialog tailwind-merge class-variance-authority cmdk
 
 Types:
 - npm i supabase@">=1.8.1" --save-dev
@@ -49,7 +48,13 @@ Types:
 - replace favicon, logo in public
 - adjust tailwind theme in config file
 
-Authentication:
+External Services:
+- make new supabase project
+- make Supabase tables, functions, triggers, webhooks
+	tables: billing (auth_id, auth_email, stripe_customer_id)
+	functions (table/server->plpgsql): make billing profile
+	webhooks (table->api): add stripe customer
+
 - set auth providers at app.supabase.com/project/.../auth/providers
 - make the app on the provider platform
 	- https://console.cloud.google.com/home/dashboard
@@ -61,18 +66,57 @@ Authentication:
 - set supabase client id and secret
 - set authorised url to localhost on supabase auth url config: app.supabase.com/project/srvugcsqhomwbephgagd/auth/url-configuration
 
-
-- Make Supabase tables, functions, triggers, webhooks
-	tables: billing
-	functions (table/server->plpgsql): make billing profile, topup balance,
-	webhooks (table->api): add stripe customer
 - Make Stripe products, webhooks, add Env vars with price ID
+
+- set env variables
 
 - Add a tailwind template
 
+Extra: npm i react-parallax-tilt (Tweet)
+
+
 You're all done!
 
----
+
+____________________________________________________________________
+
+
+TABLES
+billing (auth_id, auth_email, stripe_customer_id)
+
+
+FUNCTIONS
+make_billing_profile:
+
+begin
+  insert into public.billing(auth_id, auth_email)
+  values(new.id, new.email);
+
+  insert into public.keys(auth_id)
+  values(new.id);
+
+  return new;
+end
+
+WEBHOOKS
+add-customer-on-stripe:
+
+url: /api/webhooks/supabase
+content-type: application/json
+http params: WEBHOOK_SECRET = <generated> , TRIGGER_PROCESS = create-stripe-customer
+
+
+____________________________________________________________________
+
+
+STRIPE:
+1. Create Products
+2. Create Webhook Endpoint on Stipe dashboard (url: /api/webhooks/stripe)
+3. Set API and Webhook keys in env
+
+____________________________________________________________________
+
+
 
 Deploy Time Config
 1. edit next-sitemap.config.js, server-sitemap.xml/index.ts to appropriate routes
@@ -80,6 +124,36 @@ Deploy Time Config
 3. Stripe webhook urls
 4. Supabase webhook urls
 5. Supabase auth redirect urls
+
+
+____________________________________________________________________
+
+Generate 32 byte secret: require('crypto').randomBytes(32).toString('base64').slice(0, 32)
+____________________________________________________________________
+
+
+Content Layer (Blog)
+- npm i contentlayer next-contentlayer remark-gfm rehype-pretty-code rehype-slug rehype-autolink-headings lucide-react
+- copy /Optional/ContentLayer
+
+____________________________________________________________________
+
+Tweet
+- npm i react-parallax-tilt
+- Copy /Optional/Tweet
+- Make Twitter app with appropriate permissions
+
+____________________________________________________________________
+
+SEO
+
+Item (H→L Priority)	Function			Written
+1. Sitemap 		Allows discovery by SE		Per project
+2. Semantic Tags 	Allows understanding by SE	Per file
+3. Structured Schema	Allows deep understanding	Per file
+4. Metadata		Allows searchability by users	Per file
+5. OG			SM Thumbnails			Per item
+6. Image Opt		Improves SE Ranking		Per item
 
 ____________________________________________________________________
 
@@ -89,60 +163,15 @@ plpgsql			function	      x	          x
 server			    v		 rpc		  x
 ____________________________________________________________________
 
-Generate 32 byte secret: require('crypto').randomBytes(32).toString('base64').slice(0, 32)
-____________________________________________________________________
-
 Inferred GetServerSideProps
-type ThreadData =
-  inferRouterOutputs<AppRouter>["threads"]["joinThreadWithLinkCode"];
+type ThreadData = inferRouterOutputs<AppRouter>["threads"]["joinThreadWithLinkCode"];
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-export const config = {
-  runtime: "experimental-edge",
-  region: "iad1",
-};
-
-// export const runtime = "edge"
-
 export const getServerSideProps = (async (context) => {
-  const { query, req } = context;
-  const code = query.code as string; // Assume `code` is a string parameter
-
-  // Check if `code` is a non-null, non-empty string
-  if (!code || code.trim().length === 0) {
-    return {
-      notFound: true,
-      props: {},
-    };
-  }
-
-  let tokens = req.cookies["supabase-auth-token"];
-  let user = tokens ? await getUserFromToken(tokens) : null;
-
-  // Find the thread id and type of code
-  const caller = appRouter.createCaller({ supamaster, user });
-
-  let res: ThreadData | null = null;
-
-  try {
-    res = await caller.threads.joinThreadWithLinkCode({
-      linkCode: code,
-    });
-  } catch (e) {
-  }
-
-  if (!res) {
-    return {
-      notFound: true,
-      props: {},
-    };
-  }
-
   return {
-    redirect: { destination: `${NEXT_PUBLIC_SITE_URL}/chat/${res.threadId}` },
-    props: {},
-  };
+    props: ...
+  }
 }) satisfies GetServerSideProps;
 
 ____________________________________________________________________
